@@ -1,7 +1,7 @@
 lstMCpipe
 =========
 
-|code| |documentation| |CI| |coverage| |pypi| |zenodo| |fair|
+|code| |documentation| |slack| |CI| |coverage| |conda| |pypi| |zenodo| |fair| 
 
 .. |code| image:: https://img.shields.io/badge/lstmcpipe-code-green
   :target: https://github.com/cta-observatory/lstmcpipe/
@@ -11,12 +11,17 @@ lstMCpipe
   :target: https://codecov.io/gh/cta-observatory/lstmcpipe
 .. |documentation| image:: https://img.shields.io/badge/lstmcpipe-documentation-orange
   :target: https://cta-observatory.github.io/lstmcpipe/
+.. |conda| image:: https://img.shields.io/conda/v/conda-forge/lstmcpipe
+   :alt: Conda
 .. |pypi| image:: https://badge.fury.io/py/lstmcpipe.svg
   :target: https://badge.fury.io/py/lstmcpipe
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.6460727.svg
   :target: https://doi.org/10.5281/zenodo.6460727
 .. |fair| image:: https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow
    :target: https://fair-software.eu
+.. |slack| image:: https://img.shields.io/badge/CTA_North_slack-lstmcpipe_prods_channel-darkgreen?logo=slack&link=https%3A%2F%2Fcta-north.slack.com%2Farchives%2FC035H3C2HAS
+   :alt: Static Badge
+
 
    
 Scripts to ease the reduction of MC data on the LST cluster at La Palma.   
@@ -28,8 +33,8 @@ Enrique Garcia, garcia [at] lapp.in2p3.fr
 Lukas Nickel, lukas.nickel [at] tu-dortmund.de
 
 
-Cite us
--------
+Cite us 📝
+----------
 
 If lstMCpipe was used for your analysis, please cite:
 
@@ -50,17 +55,28 @@ in addition to the exact lstMCpipe version used from https://doi.org/10.5281/zen
 You may also want to include the config file with your published code for reproducibility.
 
 
-Install
--------
+Install 💻
+----------
 
 As as user:
 
+For lstmcpipe >= 0.10.3, the preferred installation should be conda:
+
 .. code-block::
 
-    wget https://raw.githubusercontent.com/cta-observatory/lstmcpipe/master/environment.yml
+    conda install lstmcpipe
+
+
+Former versions:
+
+.. code-block::
+
+    VERSION=0.10.1  # change as desired
+    wget https://raw.githubusercontent.com/cta-observatory/lstmcpipe/$VERSION/environment.yml
     conda env create -f environment.yml
     conda activate lstmcpipe
-    pip install lstmcpipe
+    pip install lstmcpipe==$VERSION
+
 
 This will setup a new enviroment with lstchain and other needed tools available in supported versions.
 If you already have your lstchain conda environment, you may simply activate it and install lstmcpipe there using `pip install lstmcpipe`.
@@ -89,8 +105,8 @@ to commit with `black`. (You need to stage the changes again after that). This e
 code follows our guidelines and there is less work dealing with the code checker in the CI.
 
 
-Requesting a MC analysis
-------------------------
+Requesting a MC analysis 📊
+---------------------------
 You may find the list of already run productions in the documentation.
 Please check in this list that the request you are about to make does not exist already!
 
@@ -98,25 +114,28 @@ As a LST member, you may require a MC analysis with a specific configuration, fo
 
 To do so, please:
 
-#. `Open a pull request from your fork <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork>`_ into lstMCpipe, adding the desired configuration in a new directory named `date_ProdID` in `production_configs`.
-#. You may have a look at the ``production_configs/template_prod`` as an example.
-#. Add a descriptive production ID (e.g. ``src***_psf_tuned``) to you directory and configuration.
+#. Make sure to be part of the `github cta-observatory/lst-dev team <https://github.com/orgs/cta-observatory/teams/lst-dev>`__. If not, ask one of the admins. 
+    > note that you can also fork the repository and open the pull request from your fork, but the tests will fail because they need the private LST test data
+#. Clone the repository in the cluster at La Palma.
+#. Create a new branch named with you ``prodID``
+#. Make a new directory named ``date_ProdID`` in the `production_configs` dir (have a look at the ``production_configs/template_prod`` as an example)
+#. Generate your config (see below)
+#. Open a pull request into lstMCpipe with a clear description (probably the same as in the readme of your config dir)
 #. The requested config must contain:
 
 * a lstchain config file (please provide an exhaustive config that will help others and provide a more explicit provenance information)
 * a lstmcpipe config file (to generate it, please refer to the documentation)
 * a readme with a short description of why you require this analysis to be run. **Do not add information that should not appear publicly** (such as source names) here. If you are requesting a production for a specific new source, please edit `this table on LST wiki <https://www.lst1.iac.es/wiki/index.php/MC_analysis_and_IRF_production#lstmcpipe_productions>`_. Also add the command line to generate the lstmcpipe config, that will help debugging.
 
-
-
 The proposed configuration will be tested for validity by continuous integration tests and we will interact with you to run the analysis on the cluster at La Palma.
 
 Depending on the number of requests, we may give priorities.
 
+**Need help?**
+Join the CTA North slack and ask for help in the |slack|
 
-
-Quickstart
-----------
+Quickstart 🚀
+-------------
 
 To generate your lstmcpipe configuration file, use `lstmcpipe_generate_config` command.
 If the type of production you want is not listed in the existing ones, you may create your own `PathConfig` class
@@ -144,8 +163,8 @@ but **please note** that it still requires a lot of resources to process a full 
 production. Think about other LP-IT cluster users.
 
 
-Stages
-------
+Stages ⚙️
+--------
 After launching of the pipeline all selected tasks will be performed in order.
 These are referred to as *stages* and are collected in ``lstmcpipe/stages``.
 Following is a short overview over each stage, that can be specified in the configuration.
@@ -220,8 +239,8 @@ This does not use the IRFs and cuts computed in dl2_to_irfs, so this can not be 
 It is a mere benchmark for the pipeline.
 
 
-Logs and data output
---------------------
+Logs and data output 📈
+-----------------------
 **NOTE**: ``lstmcpipe`` expects the data to be located in a specific structure on the cluster.
 Output will be written in a stanardized way next to the input data to make sure everyone can access it.
 Analysing a custom dataset requires replicating parts of the directory structure and is not the
@@ -238,8 +257,8 @@ Every time a full MC production is launched, two files with logging information 
 The first one contains a reduced summary of all the scheduled `job ids` (to which particle the job corresponds to),
 while the second one contains the same plus all the commands passed to slurm.
 
-Steps explanation
------------------
+Steps explanation 🔍
+--------------------
 
 The directory structure and the stages to run are determined by the config stages.
 After that, the job dependency between stages is done automatically.
@@ -291,14 +310,14 @@ Example of default directory structure for a prod5 MC prod:
 
 
 
-Real Data analysis
-------------------
+Real Data analysis 💀
+---------------------
 
 Real data analysis is not supposed to be supported by these scripts. Use at your own risk.
 
 
-Pipeline Support
-----------------
+Pipeline Support 🛠️
+-------------------
 
 So far the reference pipeline is ``lstchain`` and only with it a full analysis is possible.
 There is however support for ``ctapipe`` and ``hiperta`` as well.

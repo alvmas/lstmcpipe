@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         # lstchain dependency
-        python-version: [3.7]
+        python-version: ['3.9', '3.10', '3.11']
 
     steps:
       - uses: actions/checkout@v3
@@ -50,6 +50,13 @@ jobs:
             conda activate ci
             pyflakes lstmcpipe
 
+      - name: Download test data
+        env:
+          TEST_DATA_USER: ${{ secrets.TEST_DATA_USER }}
+          TEST_DATA_PASSWORD: ${{ secrets.TEST_DATA_PASSWORD }}
+        run: |
+          ./download_test_data.sh
+
       - name: Tests
         run: |
             source $CONDA/etc/profile.d/conda.sh
@@ -59,7 +66,7 @@ jobs:
       - uses: codecov/codecov-action@v1
 
       - name: Detect added configs
-        uses: tj-actions/changed-files@v18.2
+        uses: tj-actions/changed-files@v39
         id: verify-changed-files
         with:
           files: |
